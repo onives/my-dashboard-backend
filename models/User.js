@@ -41,7 +41,7 @@ UserSchema.pre('save', async function(next){
 });
 
 UserSchema.statics.findByCredentials = async (email, password) =>{
-    //search for admin by email
+    //search for user by email
     const user = await User.findOne({email})
     if(!user){
         return { error: 'Invalid Login Credentials'}

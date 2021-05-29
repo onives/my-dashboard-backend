@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser =  require('body-parser');
-
+let aboutRoutes = require('./routes/aboutRoutes');
 let userRoutes = require('./routes/userRoutes');
 require('dotenv/config');
 
@@ -11,6 +11,7 @@ app.use(bodyParser.urlencoded())
 
 //API routes
 app.use('/user', userRoutes);
+app.use('/about', aboutRoutes);
 
 const options = {
     useNewUrlParser: true,
