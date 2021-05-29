@@ -23,6 +23,13 @@ const UserSchema = mongoose.Schema({
     password: {
         type: String,
         required: true,
+        minlength: 8,
+        trim: true,
+        validate(value){
+            if(value.toLowerCase().includes('password')){
+                throw new Error("password cannot contain 'password' ")
+            }
+        }
     },
     created_at: {
         type: Date,

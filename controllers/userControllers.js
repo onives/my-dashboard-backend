@@ -26,5 +26,9 @@ const loginUser = async (req, res) =>{
       res.status(400).send(error)
   }
 };
+const fetchUsers = async(req, res) =>{
+  let user = await User.find({})
+  return res.status(200).send(user);
+};
 
-module.exports = { createUser, loginUser}
+module.exports = { createUser, loginUser, fetchUsers}
