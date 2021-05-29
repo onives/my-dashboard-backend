@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const bodyParser =  require('body-parser');
 let aboutRoutes = require('./routes/aboutRoutes');
 let userRoutes = require('./routes/userRoutes');
+let blogRoutes = require('./routes/blogRoutes');
+let projectRoutes = require('./routes/projectRoutes');
 require('dotenv/config');
 
 const app = express();
@@ -12,6 +14,8 @@ app.use(bodyParser.urlencoded())
 //API routes
 app.use('/user', userRoutes);
 app.use('/about', aboutRoutes);
+app.use('/blogs', blogRoutes);
+app.use('/projects', projectRoutes);
 
 const options = {
     useNewUrlParser: true,
