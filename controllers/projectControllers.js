@@ -13,8 +13,13 @@ const createProject = async (req, res) => {
 
 //edit project
 const updateProject = async (req, res) => {
+    const updates = Object.keys(req.body);
+    
     try{
-        const updatedProject = await Project.findByIdAndUpdate(req.params.id, req.body, {new:true, runValidators:true});
+        const updatedProject = await Project.findById(req.params.id);
+        updates.forEach((update)=>updatedProject[update] = req.body[update]);
+        await updatedProject.save();
+
         if(!updatedProject){
             return res.status(404).send({ error: "The project you are searching for was not found." })
         }
