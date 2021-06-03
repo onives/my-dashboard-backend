@@ -63,18 +63,12 @@ const updateUser = async (req, res) => {
   }
 
   try {
-    const user = await User.findById(req.params.id);
-    updates.forEach((update) => (user[update] = req.body[update]));
-    await user.save();
+    updates.forEach((update) => (req.user[update] = req.body[update]));
+    await req.user.save();
 
-    if (!user) {
-      return res
-        .status(404)
-        .send({ error: "The user you are searching for was not found." });
-    }
     res.send({
       message: "user updated successfully!",
-      data: user,
+      data: req.user
     });
   } catch (e) {
     res.status(400).send(e);
@@ -83,15 +77,9 @@ const updateUser = async (req, res) => {
 //delete user profile
 const deleteUser = async(req, res) =>{
   try{
-      const user = await User.findByIdAndDelete(req.params.id);
 
-      if(!user){
-          return res
-          .status(404) 
-          .send({error: 'Account Does not exist'});
-      }
-
-      res.send({message: `User ${user.fullName} has been sucessfully deleted`});
+    await req.user.remove()
+    res.send({message: `Account ${req.user.fullName} has been sucessfully deleted`});
 
   }catch(e){
       res.status(400).send()

@@ -45,6 +45,7 @@ const UserSchema = mongoose.Schema({
 
 });
 
+//hide private data
 UserSchema.methods.toJSON = function(){
     const user = this
     const userObject = user.toObject()
