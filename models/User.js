@@ -3,6 +3,7 @@ let validator = require('validator');
 let bcrypt = require('bcryptjs');
 let jwt = require('jsonwebtoken');
 
+
 const UserSchema = mongoose.Schema({
     fullName: {
         type: String,
@@ -43,6 +44,17 @@ const UserSchema = mongoose.Schema({
     }
 
 });
+
+UserSchema.methods.toJSON = function(){
+    const user = this
+    const userObject = user.toObject()
+
+    delete userObject.password
+    delete userObject.tokens
+
+    return userObject
+
+};
 
 UserSchema.methods.generateAuthToken = async function(){
     //generate an auth token for user

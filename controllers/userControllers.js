@@ -1,5 +1,6 @@
 let User = require("../models/User");
 
+
 const createUser = async (req, res) => {
   const user = new User(req.body);
     try {
@@ -22,15 +23,36 @@ const loginUser = async (req, res) => {
     res.send({user, token});
 
   } catch (error) {
-    console.log(error);
     res.status(400).send(error);
   }
 };
-const fetchUsers = async (req, res) => {
-  let user = await User.find({});
-  return res.status(200).send(user);
+
+//logout user from one session
+const logOutUser = async (req, res)=>{
+  try{
+    req.user.tokens = req.user.tokens.filter((token)=>{
+      return token.token !== req.token
+    })
+    await req.user.save();
+    res.send();
+
+  }catch(e){
+    res.status(500).send(e);
+  }
+}
+
+//logout of all sessions
+const logOutAll = async (req, res)=>{
+
+
 };
 
+//fetch user profile
+const fetchUser = async (req, res) => {
+    res.send(req.user);
+};
+
+//edit user information
 const updateUser = async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ['fullName', 'password'];
@@ -58,4 +80,23 @@ const updateUser = async (req, res) => {
     res.status(400).send(e);
   }
 };
-module.exports = { createUser, loginUser, fetchUsers, updateUser };
+//delete user profile
+const deleteUser = async(req, res) =>{
+  try{
+      const user = await User.findByIdAndDelete(req.params.id);
+
+      if(!user){
+          return res
+          .status(404) 
+          .send({error: 'Account Does not exist'});
+      }
+
+      res.send({message: `User ${user.fullName} has been sucessfully deleted`});
+
+  }catch(e){
+      res.status(400).send()
+  }
+ 
+};
+
+module.exports = { createUser, loginUser, fetchUser, updateUser, deleteUser, logOutUser };
