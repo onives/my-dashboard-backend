@@ -1,9 +1,11 @@
 let router = require('express').Router();
+let auth = require('../middleware/auth');
 
-let { createAbout, fetchAbout, updateAbout } = require('../controllers/aboutControllers');
+let { createAbout, fetchAbout, updateAbout , deleteAbout} = require('../controllers/aboutControllers');
 
-router.post('/', createAbout);
-router.get('/', fetchAbout);
-router.patch('/:id', updateAbout);
+router.post('/', auth, createAbout);
+router.get('/', auth, fetchAbout);
+router.patch('/:id', auth, updateAbout);
+router.delete('/:id', auth, deleteAbout);
 
 module.exports = router;

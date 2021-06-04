@@ -32,6 +32,9 @@ const UserSchema = mongoose.Schema({
             }
         }
     },
+    bio:{
+        type: String,
+    },
     tokens: [{
         token:{
             type: String,
@@ -41,9 +44,28 @@ const UserSchema = mongoose.Schema({
     created_at: {
         type: Date,
         default: Date.now
-    }
+    },
+    projects: [{
+        project:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Project'
+        }
+    }],
+    blogs: [{
+        blog:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Project'
+        }
+    }]
 
 });
+
+//set the virtual relationship between the user and about.
+// UserSchema.virtual('about', {
+//     ref: 'About',
+//     localField: '_id',
+//     foreignField: 'owner'
+// })
 
 //hide private data
 UserSchema.methods.toJSON = function(){

@@ -55,8 +55,9 @@ const fetchUser = async (req, res) => {
 
 //edit user information
 const updateUser = async (req, res) => {
+
   const updates = Object.keys(req.body);
-  const allowedUpdates = ['fullName', 'password'];
+  const allowedUpdates = ['fullName', 'password', 'bio'];
   const isValidOperation = updates.every((update)=>allowedUpdates.includes(update));
 
   if(!isValidOperation){
