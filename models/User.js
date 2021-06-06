@@ -2,6 +2,8 @@ let mongoose = require('mongoose');
 let validator = require('validator');
 let bcrypt = require('bcryptjs');
 let jwt = require('jsonwebtoken');
+let Project = require('./Project');
+let Blog = require('./Blog');
 
 
 const UserSchema = mongoose.Schema({
@@ -54,18 +56,11 @@ const UserSchema = mongoose.Schema({
     blogs: [{
         blog:{
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Project'
+            ref: 'Blog'
         }
     }]
 
 });
-
-//set the virtual relationship between the user and about.
-// UserSchema.virtual('about', {
-//     ref: 'About',
-//     localField: '_id',
-//     foreignField: 'owner'
-// })
 
 //hide private data
 UserSchema.methods.toJSON = function(){
@@ -97,6 +92,14 @@ UserSchema.pre('save', async function(next){
     if(user.isModified('password')){
         user.password = await bcrypt.hash(user.password, 8)
     }
+    next()
+});
+
+UserSchema.pre('remove', async function(next){
+    //delete whatever the user created before deleting user account
+    const user = this
+    await Project.deleteMany({owner: user._id});
+    await Blog.deleteMany({owner: user._id});
     next()
 });
 

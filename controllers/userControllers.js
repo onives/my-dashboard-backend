@@ -23,6 +23,7 @@ const loginUser = async (req, res) => {
     res.send({user, token});
 
   } catch (error) {
+    console.log(error)
     res.status(400).send(error);
   }
 };
@@ -44,7 +45,13 @@ const logOutUser = async (req, res)=>{
 
 //logout of all sessions
 const logOutAll = async (req, res)=>{
-
+  try{
+    req.user.tokens = []
+    await req.user.save()
+    res.send()
+  }catch(e){
+    res.status(500).send()
+  }
 
 };
 
@@ -89,4 +96,4 @@ const deleteUser = async(req, res) =>{
  
 };
 
-module.exports = { createUser, loginUser, fetchUser, updateUser, deleteUser, logOutUser };
+module.exports = { createUser, loginUser, fetchUser, updateUser, deleteUser, logOutUser , logOutAll};

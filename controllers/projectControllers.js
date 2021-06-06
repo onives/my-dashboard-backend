@@ -2,30 +2,27 @@ let Project = require('../models/Project');
 
 //creat project instance
 const createProject = async (req, res) => {
-    try {
-      const project = new Project(req.body);
-      await project.save();
-      res.status(201).send(project);
-    } catch (error) {
-      res.status(400).send(error);
-    }
-  };
+    const project = new Project({
+        ...req.body, owner: req.user._id
+    });
+    await project.save();
+    return res.status(201).send(project);
+};
 
 //edit project
 const updateProject = async (req, res) => {
     const updates = Object.keys(req.body);
     
     try{
-        const updatedProject = await Project.findById(req.params.id);
-        updates.forEach((update)=>updatedProject[update] = req.body[update]);
-        await updatedProject.save();
-
-        if(!updatedProject){
-            return res.status(404).send({ error: "The project you are searching for was not found." })
+        const project = await Project.findOne({_id: req.params.id, owner: req.user._id});
+        updates.forEach((update)=>project[update] = req.body[update]);
+        if(!project){
+            return res.status(404).send({ error: "The project not found." })
         }
+        await project.save();
         res.send({
             message: "Project updated successfully!",
-            data: updatedProject,
+            data: project,
           });
     }catch(e){
         res.status(400).send(e);
@@ -34,35 +31,31 @@ const updateProject = async (req, res) => {
 
 //fetch all projects
 const fetchProjects = async(req, res) =>{
-    let projects = await Project.find({})
-    return res.status(200).send(projects);
+    try{
+        let projects = await Project.find({owner: req.user._id}); //works the same way
+        // await req.user.populate('projects').execPopulate()
+        res.status(200).send(projects)
+        // res.status(200).send(req.user.projects);
+    }catch(e){
+        res.status(500).send()
+    }
 };
 
 //Delete Project from database
 const deleteProject = async(req, res) =>{
     try{
-        const project = await Project.findByIdAndDelete(req.params.id);
+        const project = await Project.findOne({_id: req.params.id, owner: req.user._id})
         if(!project){
             return res
             .status(404) 
-            .send({error: 'The Project you are searching for was not found'});
+            .send({error: 'Project not found'});
         }
-
-        res.send({message: `Project ${project.title} has been sucessfully deleted`});
+        await project.deleteOne();
+        res.send({message: `Project sucessfully deleted`});
 
     }catch(e){
-        res.status(400).send()
+        res.status(400).send(e)
     }
-    
-    // const { id } = req.params;
-    // const project = await Project.findById(id);
-   
-
-    // await project.deleteOne(project);
-
-    // return res
-    // .status(200)
-    // .send({message: `Project ${project.title} has been sucessfully deleted`})
 };
 
 module.exports = {createProject, updateProject, fetchProjects, deleteProject};
