@@ -28,7 +28,7 @@ const UserSchema = mongoose.Schema({
         required: true,
         minlength: 8,
         trim: true,
-        validate(value){
+         validate(value){
             if(value.toLowerCase().includes('password')){
                 throw new Error("password cannot contain 'password' ")
             }
@@ -48,16 +48,12 @@ const UserSchema = mongoose.Schema({
         default: Date.now
     },
     projects: [{
-        project:{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Project'
-        }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Project'
     }],
     blogs: [{
-        blog:{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Blog'
-        }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Blog'
     }]
 
 });

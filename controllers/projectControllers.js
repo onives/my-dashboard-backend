@@ -1,11 +1,14 @@
 let Project = require('../models/Project');
+const User = require('../models/User')
 
 //creat project instance
 const createProject = async (req, res) => {
     const project = new Project({
         ...req.body, owner: req.user._id
     });
+    req.user.projects = req.user.projects.concat( project._id );
     await project.save();
+    await req.user.save();
     return res.status(201).send(project);
 };
 
@@ -30,11 +33,12 @@ const updateProject = async (req, res) => {
 };
 
 //fetch all projects
-const fetchProjects = async(req, res) =>{
+const fetchUserProjects = async(req, res) =>{
     try{
-        let projects = await Project.find({owner: req.user._id}); //works the same way
+        // let projects = await Project.find({owner: req.user._id}); //works the same way
+        const user = await User.findOne({_id: req.user._id}).populate('projects').exec();
         // await req.user.populate('projects').execPopulate()
-        res.status(200).send(projects)
+        res.status(200).send(user.projects)
         // res.status(200).send(req.user.projects);
     }catch(e){
         res.status(500).send()
@@ -58,4 +62,4 @@ const deleteProject = async(req, res) =>{
     }
 };
 
-module.exports = {createProject, updateProject, fetchProjects, deleteProject};
+module.exports = {createProject, updateProject, fetchUserProjects, deleteProject};

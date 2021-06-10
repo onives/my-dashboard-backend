@@ -1,4 +1,5 @@
 let Blog = require('../models/Blog');
+const User = require('../models/User')
 
 //creat blog instance
 const createBlog = async (req, res) => {
@@ -6,8 +7,10 @@ const createBlog = async (req, res) => {
   const blog = new Blog({
     ...req.body, owner: req.user._id
   });
-  // req.user.blogs = req.user.blogs.concat({ blog }); 
-  await blog.save();
+  req.user.blogs = req.user.blogs.concat( blog._id );
+  await blog.save(); 
+  await req.user.save();
+
   return res.status(201).send(blog);
 };
 
@@ -32,13 +35,15 @@ const updateBlog = async (req, res) => {
 };
 
 //fetch all blogs
-const fetchBlogs = async(req, res) =>{
+const fetchUserBlogs = async(req, res) =>{
   try{
-    let blogs = await Blog.find({owner: req.user._id}); 
-    res.status(200).send(blogs)
+    // let blogs = await Blog.find({owner: req.user._id}); 
+    const user = await User.findOne({_id: req.user._id}).populate('blogs').exec();
+    // let blogs = req.user.populate('blogs').execPopulate();
+    res.status(200).send(user.blogs)
   }catch(e){
     console.log(e)
-      res.status(500).send()
+      res.status(500).send(e)
   }
 };
 
@@ -59,4 +64,4 @@ const deleteBlog = async(req, res) =>{
 }
 };
 
-module.exports = {createBlog, updateBlog, fetchBlogs, deleteBlog};
+module.exports = {createBlog, updateBlog, fetchUserBlogs, deleteBlog};

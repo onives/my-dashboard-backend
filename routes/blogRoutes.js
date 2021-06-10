@@ -1,10 +1,10 @@
 let router = require('express').Router();
 let auth = require('../middleware/auth');
-let {createBlog, updateBlog, fetchBlogs, deleteBlog} = require('../controllers/blogControllers');
+let {createBlog, updateBlog, fetchUserBlogs, deleteBlog} = require('../controllers/blogControllers');
 
 
 router.post('/', auth, createBlog);
-router.get('/', auth, fetchBlogs);
+router.get('/', auth, fetchUserBlogs);
 router.patch('/:id', auth, updateBlog);
 router.delete('/:id', auth, deleteBlog);
 
