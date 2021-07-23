@@ -1,15 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser =  require('body-parser');
-// let aboutRoutes = require('./routes/aboutRoutes');
 let userRoutes = require('./routes/userRoutes');
 let blogRoutes = require('./routes/blogRoutes');
 let projectRoutes = require('./routes/projectRoutes');
+const cors = require('cors')
 require('dotenv/config');
 
 const app = express();
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded())
+app.use(cors())
 
 //API routes
 app.use('/user', userRoutes);
