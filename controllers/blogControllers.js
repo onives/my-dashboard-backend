@@ -63,5 +63,15 @@ const deleteBlog = async(req, res) =>{
     res.status(400).send(e)
 }
 };
+//fetch all blogs
+const fetchAllBlogs = async(req, res) =>{
+  try{
+      let blogs = await Blog.find({})
+      return res.status(200).send(blogs);
+  }catch(e){
+      console.log(e)
+      res.status(500).send(e)
+  }
+};
 
-module.exports = {createBlog, updateBlog, fetchUserBlogs, deleteBlog};
+module.exports = {createBlog, updateBlog, fetchUserBlogs, deleteBlog, fetchAllBlogs};

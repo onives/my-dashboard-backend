@@ -4,7 +4,7 @@ let bcrypt = require('bcryptjs');
 let jwt = require('jsonwebtoken');
 let Project = require('./Project');
 let Blog = require('./Blog');
-
+require('dotenv/config');
 
 const UserSchema = mongoose.Schema({
     fullName: {
@@ -57,6 +57,7 @@ const UserSchema = mongoose.Schema({
     }]
 
 });
+const {JWT_KEY} = process.env
 
 //hide private data
 UserSchema.methods.toJSON = function(){
@@ -74,7 +75,7 @@ UserSchema.methods.toJSON = function(){
 UserSchema.methods.generateAuthToken = async function(){
     //generate an auth token for user
     const user = this
-    const token = jwt.sign({id: user._id}, 'SomethingInTheRain2018') //generate jwt_key
+    const token = jwt.sign({id: user._id}, JWT_KEY) //generate jwt_key
 
     user.tokens = user.tokens.concat({ token }); 
     await user.save();

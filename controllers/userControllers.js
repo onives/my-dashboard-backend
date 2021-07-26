@@ -95,5 +95,15 @@ const deleteUser = async(req, res) =>{
   }
  
 };
+//fetch all users
+const fetchAllUsers = async(req, res) =>{
+  try{
+      let users = await User.find({})
+      return res.status(200).send(users);
+  }catch(e){
+      console.log(e)
+      res.status(500).send(e)
+  }
+};
 
-module.exports = { createUser, loginUser, fetchUser, updateUser, deleteUser, logOutUser , logOutAll};
+module.exports = { createUser, loginUser, fetchUser, updateUser, deleteUser, logOutUser , logOutAll, fetchAllUsers};
