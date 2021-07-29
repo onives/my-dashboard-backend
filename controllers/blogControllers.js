@@ -7,11 +7,16 @@ const createBlog = async (req, res) => {
   const blog = new Blog({
     ...req.body, owner: req.user._id
   });
-  req.user.blogs = req.user.blogs.concat( blog._id );
-  await blog.save(); 
-  await req.user.save();
-
-  return res.status(201).send(blog);
+  try{
+    req.user.blogs = req.user.blogs.concat( blog._id );
+    await blog.save(); 
+    await req.user.save();
+  
+    return res.status(201).send(blog);
+  }catch(e){
+    console.log(e)
+    res.status(400).send(e);
+  }
 };
 
 //edit blog

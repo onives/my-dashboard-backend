@@ -45,6 +45,19 @@ const fetchUserProjects = async(req, res) =>{
     }
 };
 
+// fetch a project by id
+const getSingleProject = async(req, res)=>{
+    try {
+        const project = await Project.findById(req.params.id);
+        if (project == null) {
+            return res.status(404).json({ message: "Cannot find Project" });
+        }
+        res.status(200).send(project)
+    } catch (err) {
+        return res.status(500).json({ message: err.message });
+    }
+}
+
 //Delete Project from database
 const deleteProject = async(req, res) =>{
     try{
@@ -73,4 +86,4 @@ const fetchAllProjects = async(req, res) =>{
     }
 };
 
-module.exports = {createProject, updateProject, fetchUserProjects, deleteProject, fetchAllProjects};
+module.exports = {createProject, updateProject, fetchUserProjects, deleteProject, fetchAllProjects, getSingleProject};
