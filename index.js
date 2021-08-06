@@ -14,7 +14,6 @@ app.use(cors())
 
 //API routes
 app.use('/user', userRoutes);
-// app.use('/about', aboutRoutes);
 app.use('/blogs', blogRoutes);
 app.use('/projects', projectRoutes);
 
@@ -33,6 +32,3 @@ mongoose.connect(DATABASE_URL, options, ()=>{
         console.log('now listening for requests');
     });
 });
-
-
-

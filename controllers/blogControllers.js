@@ -79,4 +79,17 @@ const fetchAllBlogs = async(req, res) =>{
   }
 };
 
-module.exports = {createBlog, updateBlog, fetchUserBlogs, deleteBlog, fetchAllBlogs};
+// fetch a blog by id
+const getSingleBlog = async(req, res)=>{
+  try {
+      const blog = await Blog.findById(req.params.id);
+      if (blog == null) {
+          return res.status(404).json({ message: "Cannot find Blog" });
+      }
+      res.status(200).send(blog)
+  } catch (err) {
+      return res.status(500).json({ message: err.message });
+  }
+}
+
+module.exports = {createBlog, updateBlog, fetchUserBlogs, deleteBlog, fetchAllBlogs, getSingleBlog};

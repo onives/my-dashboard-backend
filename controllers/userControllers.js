@@ -55,9 +55,22 @@ const logOutAll = async (req, res)=>{
 
 };
 
-//fetch user profile
+//fetch authenticated user profile
 const fetchUser = async (req, res) => {
     res.send(req.user);
+};
+
+//fetch user profile by id
+const fetchUserById = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (user == null) {
+        return res.status(404).json({ message: "User doesn't exist" });
+    }
+    res.status(200).send(user)
+} catch (err) {
+    return res.status(500).json({ message: err.message });
+}
 };
 
 //edit user information
@@ -86,7 +99,6 @@ const updateUser = async (req, res) => {
 //delete user profile
 const deleteUser = async(req, res) =>{
   try{
-
     await req.user.remove()
     res.send({message: `Account ${req.user.fullName} has been sucessfully deleted`});
 
@@ -106,4 +118,4 @@ const fetchAllUsers = async(req, res) =>{
   }
 };
 
-module.exports = { createUser, loginUser, fetchUser, updateUser, deleteUser, logOutUser , logOutAll, fetchAllUsers};
+module.exports = { createUser, loginUser, fetchUser, updateUser, deleteUser, logOutUser , logOutAll, fetchAllUsers, fetchUserById};
