@@ -32,4 +32,16 @@ const ProjectSchema = mongoose.Schema({
     }
 });
 
+//hide private data
+ProjectSchema.methods.toJSON = function(){
+    const project = this
+    const projectObject = project.toObject()
+
+    delete projectObject.owner
+    delete projectObject._id
+
+    return projectObject
+
+};
+
 module.exports = mongoose.model("Project", ProjectSchema);

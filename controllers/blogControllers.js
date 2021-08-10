@@ -52,6 +52,16 @@ const fetchUserBlogs = async(req, res) =>{
   }
 };
 
+//fetch blogs by user Id
+const fetchBlogsByUserId = async(req, res)=>{
+  try{
+    const user = await User.findOne({_id: req.params.id}).populate('blogs').exec();
+    res.status(200).send(user.blogs)
+  }catch(e){
+    console.log(e)
+      res.status(500).send(e)
+  }
+}
 //Delete Blog from database
 const deleteBlog = async(req, res) =>{
   try{
@@ -92,4 +102,4 @@ const getSingleBlog = async(req, res)=>{
   }
 }
 
-module.exports = {createBlog, updateBlog, fetchUserBlogs, deleteBlog, fetchAllBlogs, getSingleBlog};
+module.exports = {createBlog, updateBlog, fetchUserBlogs, deleteBlog, fetchAllBlogs, getSingleBlog, fetchBlogsByUserId};

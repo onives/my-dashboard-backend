@@ -27,4 +27,15 @@ const BlogSchema = mongoose.Schema({
     }
 });
 
+//hide private data
+BlogSchema.methods.toJSON = function(){
+    const blog = this
+    const blogObject = blog.toObject()
+
+    delete blogObject.owner
+    delete blogObject._id
+
+    return blogObject
+
+};
 module.exports = mongoose.model("Blog", BlogSchema);

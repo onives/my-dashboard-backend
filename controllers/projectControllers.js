@@ -45,6 +45,17 @@ const fetchUserProjects = async(req, res) =>{
     }
 };
 
+// fetch projects by userId
+const fetchProjectsByUserId = async(req, res) =>{
+    try{
+        const user = await User.findOne({_id: req.params.id}).populate('projects').exec();
+        res.status(200).send(user.projects)
+    }catch(e){
+        res.status(500).send()
+    }
+};
+
+
 // fetch a project by id
 const getSingleProject = async(req, res)=>{
     try {
@@ -86,4 +97,4 @@ const fetchAllProjects = async(req, res) =>{
     }
 };
 
-module.exports = {createProject, updateProject, fetchUserProjects, deleteProject, fetchAllProjects, getSingleProject};
+module.exports = {createProject, updateProject, fetchUserProjects, deleteProject, fetchAllProjects, getSingleProject, fetchProjectsByUserId};
