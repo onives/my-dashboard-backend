@@ -38,7 +38,6 @@ ProjectSchema.methods.toJSON = function(){
     const projectObject = project.toObject()
 
     delete projectObject.owner
-    delete projectObject._id
 
     return projectObject
 

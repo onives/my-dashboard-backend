@@ -33,7 +33,6 @@ BlogSchema.methods.toJSON = function(){
     const blogObject = blog.toObject()
 
     delete blogObject.owner
-    delete blogObject._id
 
     return blogObject
 
