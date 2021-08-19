@@ -4,6 +4,7 @@ const bodyParser =  require('body-parser');
 let userRoutes = require('./routes/userRoutes');
 let blogRoutes = require('./routes/blogRoutes');
 let projectRoutes = require('./routes/projectRoutes');
+let contactRoute = require('./routes/contactRoute');
 const cors = require('cors')
 require('dotenv/config');
 
@@ -16,6 +17,7 @@ app.use(cors())
 app.use('/user', userRoutes);
 app.use('/blogs', blogRoutes);
 app.use('/projects', projectRoutes);
+app.use('/', contactRoute)
 
 const options = {
     useNewUrlParser: true,
